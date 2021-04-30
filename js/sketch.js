@@ -3,7 +3,7 @@ class Sketch extends Engine {
     this._background_color = "#e0e1dd";
     this._max_tries = 50000;
     this._min_radius = 15;
-    this._max_radius = 75;
+    this._max_radius = 100;
     this._max_eyes = 500;
     this._dr = 5;
     this._mouse_pos = new Position(this.width / 2, this.height / 2);
@@ -87,6 +87,8 @@ class Sketch extends Engine {
         console.log("%c Recording ended", "color: red; font-size: 2rem");
       }
     }
+
+    if (this.frameCount % 60 == 0) console.log(this.frameRate);
   }
 
   mousemove(e) {
@@ -98,4 +100,10 @@ const random = (a, b) => {
   if (a == undefined && b == undefined) return random(0, 1);
   else if (b == undefined) return random(0, a);
   else if (a != undefined && b != undefined) return Math.random() * (b - a) + a;
+};
+
+const random_interval = (average, interval) => {
+  average = average || 0.5;
+  interval = interval || 0.5;
+  return random(average - interval, average + interval);
 };
