@@ -1,15 +1,16 @@
 class Eye {
-  constructor(x, y, r, background_color = "white") {
+  constructor(x, y, r) {
     this._pos = new Position(Math.floor(x), Math.floor(y));
     this._r = r;
-    this._background_color = background_color;
 
-    // palette https://coolors.co/f8f9fa-e9ecef-dee2e6-ced4da-adb5bd-6c757d-495057-343a40-212529
-
-    this._pupil_color = "rgba(61, 0, 12, 1)";
-    this._eyelid_color = "rgba(13, 27, 42, 1)";
-    this._eyelid_border = "rgba(0, 0, 0, 0.5)";
+    this._pupil_color = new Color(350, 75, 40);
+    this._eyelid_color = new Color(212, 80, 5);
+    this._eyelid_border = new Color(212, 90, 5);
+    this._background_color = new Color(0, 25, 95);
     this._line_width = 2;
+
+    const max_variation = 10;
+    this._pupil_color.variation = random_interval(0, max_variation);
 
     this._open = 1;
     this._rotation = 0;
@@ -20,19 +21,21 @@ class Eye {
   _calculateDistances() {
     this._pupil_distance = 0.4 * this._r;
     this._minDist = this._r * 1;
-    this._maxDist = this._r * 4;
+    this._maxDist = this._r * 5;
   }
 
   move(mouse_pos) {
-    this._rotation = Math.atan2(this.pos.y - mouse_pos.y, this.pos.x - mouse_pos.x) + Math.PI;
-
     const dist = this.posDist(mouse_pos);
+
     if (dist > this._minDist) {
       const percent = 1 - Math.min((dist - this._minDist) / (this._maxDist - this._minDist), 1);
       this._open = this.ease(percent);
     } else {
       this._open = 1;
     }
+
+    if (dist < this._maxDist) this._rotation = Math.atan2(this.pos.y - mouse_pos.y, this.pos.x - mouse_pos.x) + Math.PI;
+    else this._rotation = 0;
   }
 
   show(ctx) {
@@ -42,7 +45,7 @@ class Eye {
 
     // draw eye background
     ctx.save();
-    ctx.fillStyle = this._eyelid_color;
+    ctx.fillStyle = this._eyelid_color.HSL;
     ctx.beginPath();
     ctx.arc(0, 0, this.r, 0, Math.PI * 2);
     ctx.fill();
@@ -50,10 +53,10 @@ class Eye {
 
     // give the eyelids some border
     if (this._open > this._eyelids_epsilon && this._open < (1 - this._eyelids_epsilon)) {
-      const line_width = 2 * (1 - this._open);
+      const line_width = 4 * (1 - this._open);
       ctx.save();
       ctx.beginPath();
-      ctx.strokeStyle = this._eyelid_border;
+      ctx.strokeStyle = this._eyelid_border.HSL;
       ctx.lineWidth = line_width;
       ctx.ellipse(0, 0, this._r - line_width, this._r * this._open + line_width / 2, 0, 0, Math.PI * 2);
       ctx.stroke();
@@ -70,7 +73,7 @@ class Eye {
     // color the white part
     ctx.save();
     ctx.beginPath();
-    ctx.fillStyle = this._background_color;
+    ctx.fillStyle = this._background_color.HSL;
     ctx.arc(0, 0, this.r - this._line_width, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
@@ -79,7 +82,7 @@ class Eye {
     ctx.save();
     ctx.rotate(this._rotation);
     ctx.translate(this._pupil_distance, 0);
-    ctx.fillStyle = this._pupil_color;
+    ctx.fillStyle = this._pupil_color.HSL;
     ctx.beginPath();
     ctx.arc(0, 0, this._r - this._pupil_distance, 0, Math.PI * 2);
     ctx.fill();
@@ -89,7 +92,7 @@ class Eye {
 
     // draw the outline
     ctx.save();
-    ctx.strokeStyle = this._eyelid_color;
+    ctx.strokeStyle = this._eyelid_color.HSL;
     ctx.beginPath();
     ctx.arc(0, 0, this.r, 0, Math.PI * 2);
     ctx.stroke();
