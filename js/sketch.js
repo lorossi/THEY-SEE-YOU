@@ -1,6 +1,6 @@
 class Sketch extends Engine {
   preload() {
-    this._background_color = "#e0e1dd";
+    this._background_color = new Color(0, 0, 86);
     this._max_tries = 50000;
     this._min_radius = 15;
     this._max_radius = 100;
@@ -20,21 +20,24 @@ class Sketch extends Engine {
     }
     // noise setup
     this._simplex = new SimplexNoise();
+    // base hue setup, gives some variation over each sketch
+    const base_hue = random(360);
     // eyes setup
     this._eyes = [];
-
-    const ex = random(this.width);
-    const ey = random(this.height);
-    const first_r = random(this._min_radius, this._max_radius);
-    this._eyes.push(new Eye(ex, ey, first_r));
-
     let tries = 0;
     while (tries < this._max_tries && this._eyes.length < this._max_eyes) {
       tries++;
 
       const ex = random(this.width);
       const ey = random(this.height);
-      const new_eye = new Eye(ex, ey, 0, this._background_color);
+      const new_eye = new Eye(ex, ey, 0, base_hue);
+
+      if (this._eyes.length == 0) {
+        const r = random(this._min_radius, this._max_radius);
+        new_eye.r = r;
+        this._eyes.push(new_eye);
+        continue;
+      }
 
       for (let r = this._min_radius; r <= this._max_radius; r += this._dr) {
         new_eye.r = r;
@@ -64,7 +67,7 @@ class Sketch extends Engine {
 
     this.ctx.save();
     this.ctx.clearRect(0, 0, this.width, this.height);
-    this.ctx.fillStyle = "white";
+    this.ctx.fillStyle = this._background_color.HSL;
     this.ctx.fillRect(0, 0, this.width, this.height);
     this.ctx.restore();
 
@@ -93,6 +96,10 @@ class Sketch extends Engine {
 
   mousemove(e) {
     this._mouse_pos = this._calculate_press_coords(e);
+  }
+
+  click() {
+    this.setup();
   }
 }
 

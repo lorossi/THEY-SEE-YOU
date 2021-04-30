@@ -1,15 +1,15 @@
 class Eye {
-  constructor(x, y, r) {
+  constructor(x, y, r, base_hue) {
     this._pos = new Position(Math.floor(x), Math.floor(y));
     this._r = r;
 
-    this._pupil_color = new Color(350, 75, 40);
+    this._pupil_color = new Color(base_hue, 75, 40);
     this._eyelid_color = new Color(212, 80, 5);
     this._eyelid_border = new Color(212, 90, 5);
     this._background_color = new Color(0, 25, 95);
     this._line_width = 2;
 
-    const max_variation = 10;
+    const max_variation = 15;
     this._pupil_color.variation = random_interval(0, max_variation);
 
     this._open = 1;
