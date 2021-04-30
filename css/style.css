@@ -31,11 +31,12 @@ a:visited, a:active {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 #sketch {
-  height: 95vh;
-  width: 95vh;
+  height: 90vh;
+  width: 90vh;
 
   touch-action: none;
 }

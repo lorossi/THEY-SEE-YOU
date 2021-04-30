@@ -25,6 +25,8 @@ class Sketch extends Engine {
     // eyes setup
     this._eyes = [];
     let tries = 0;
+
+    const started = performance.now();
     while (tries < this._max_tries && this._eyes.length < this._max_eyes) {
       tries++;
 
@@ -54,8 +56,8 @@ class Sketch extends Engine {
         }
       }
     }
-
-    console.log("DONE", this._eyes.length);
+    const elapsed = performance.now() - started;
+    console.log("Generated", this._eyes.length, "eyes in", elapsed, "ms");
   }
 
   draw() {
@@ -90,8 +92,6 @@ class Sketch extends Engine {
         console.log("%c Recording ended", "color: red; font-size: 2rem");
       }
     }
-
-    if (this.frameCount % 60 == 0) console.log(this.frameRate);
   }
 
   mousemove(e) {

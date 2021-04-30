@@ -21,7 +21,7 @@ class Eye {
   _calculateDistances() {
     this._pupil_distance = 0.4 * this._r;
     this._minDist = this._r * 1;
-    this._maxDist = this._r * 5;
+    this._maxDist = this._r * 4.5;
   }
 
   move(mouse_pos) {
