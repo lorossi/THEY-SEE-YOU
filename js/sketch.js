@@ -1,9 +1,9 @@
 class Sketch extends Engine {
   preload() {
-    this._background_color = "white";
+    this._background_color = "#e0e1dd";
     this._max_tries = 50000;
     this._min_radius = 15;
-    this._max_radius = 125;
+    this._max_radius = 75;
     this._max_eyes = 500;
     this._dr = 5;
     this._mouse_pos = new Position(this.width / 2, this.height / 2);
