@@ -102,6 +102,14 @@ class Engine {
     }
   }
 
+  mouseenter(e) {
+
+  }
+
+  mouseleave(e) {
+
+  }
+
   touchdown(e) {
     this.mousedown(e);
   }
@@ -198,6 +206,8 @@ document.addEventListener("DOMContentLoaded", () => {
   canvas.addEventListener("mousedown", e => s.mousedown(e));
   canvas.addEventListener("mouseup", e => s.mouseup(e));
   canvas.addEventListener("mousemove", e => s.mousemove(e));
+  canvas.addEventListener("mouseenter", e => s.mouseenter(e));
+  canvas.addEventListener("mouseleave", e => s.mouseleave(e));
   // touchscreen event listensers
   canvas.addEventListener("touchstart", e => s.touchdown(e));
   canvas.addEventListener("touchend", e => s.touchup(e));

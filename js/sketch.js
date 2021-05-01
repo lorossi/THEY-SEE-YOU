@@ -6,10 +6,11 @@ class Sketch extends Engine {
     this._max_radius = 100;
     this._max_eyes = 250;
     this._dr = 5;
-    this._mouse_pos = new Position(this.width / 2, this.height / 2);
+    this._noise_radius = 1;
 
     this._duration = 900;
     this._recording = false;
+    this._auto = false;
   }
 
   setup() {
@@ -18,6 +19,9 @@ class Sketch extends Engine {
       this._capturer = new CCapture({ format: "png" });
       this._capturer_started = false;
     }
+    // eyes look location
+    this._mouse_pos = new Position();
+    this._mouse_out = true;
     // noise setup
     this._simplex = new SimplexNoise();
     // base hue setup, gives some hue_variation over each sketch
@@ -67,6 +71,23 @@ class Sketch extends Engine {
       console.log("%c Recording started", "color: green; font-size: 2rem");
     }
 
+    if (this._auto) {
+      const percent = (this.frameCount % this._duration) / this._duration;
+      const time_theta = percent * Math.PI * 2;
+
+      const nx = this._noise_radius * (1 + Math.cos(time_theta));
+      const ny = this._noise_radius * (1 + Math.sin(time_theta));
+
+      const n = this._simplex.noise2D(nx, ny);
+      const rho = this.width / 2 * n;
+
+      const mx = rho * Math.cos(time_theta) + this.width / 2;
+      const my = rho * Math.sin(time_theta) + this.height / 2;
+
+      this._mouse_pos = new Position(mx, my);
+      this._mouse_out = false;
+    }
+
     this.ctx.save();
     this.ctx.clearRect(0, 0, this.width, this.height);
     this.ctx.fillStyle = this._background_color.HSL;
@@ -75,7 +96,7 @@ class Sketch extends Engine {
 
     this.ctx.save();
     this._eyes.forEach(e => {
-      e.move(this._mouse_pos);
+      e.move(this._mouse_pos, this._mouse_out);
       e.show(this.ctx);
     });
     this.ctx.restore();
@@ -95,13 +116,24 @@ class Sketch extends Engine {
   }
 
   mousemove(e) {
+    if (this._auto) return;
     this._mouse_pos = this._calculate_press_coords(e);
+  }
+
+  mouseenter(e) {
+    this._mouse_out = false;
+  }
+
+  mouseleave(e) {
+    this._mouse_out = true;
   }
 
   click() {
     this.setup();
   }
 }
+
+ease = x => -(Math.cos(Math.PI * x) - 1) / 2;
 
 const random = (a, b) => {
   if (a == undefined && b == undefined) return random(0, 1);

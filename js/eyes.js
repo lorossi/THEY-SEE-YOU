@@ -18,7 +18,7 @@ class Eye {
     this._inner_iris_color.hue_variation = random_interval(0, max_hue_variation);
 
     // variable initializations
-    this._open = 1;
+    this._open = 0;
     this._rotation = 0;
     this._eyelids_epsilon = 0.01;
     // calculate sizes and distances relative to radius
@@ -29,17 +29,27 @@ class Eye {
     this._iris_distance = 0.4 * this._r;
     this._iris_radius = this._r - this._iris_distance;
     this._pupil_radius = this._iris_radius * 0.2;
-    this._min_dist = this._r * 1.5;
+    this._min_dist = this._r * 2;
     this._max_dist = this._r * 5;
     this._line_width = this._r / 75 * 4;
   }
 
-  move(mouse_pos) {
+  move(mouse_pos, mouse_out) {
+    if (mouse_out) {
+      this._open = 0;
+      return;
+    }
+
+    if (mouse_pos.x == undefined || mouse_pos.y == undefined) {
+      this._open = 0;
+      return;
+    }
+
     const dist = this.posDist(mouse_pos);
 
     if (dist > this._min_dist) {
       const percent = 1 - Math.min((dist - this._min_dist) / (this._max_dist - this._min_dist), 1);
-      this._open = this.ease(percent);
+      this._open = ease(percent);
     } else {
       this._open = 1;
     }
@@ -139,11 +149,6 @@ class Eye {
   isClose(other) {
     if (other == this) return false;
     return this.eyeDist(other) < (this.r + other.r);
-  }
-
-  ease(x) {
-    return -(Math.cos(Math.PI * x) - 1) / 2;
-
   }
 
   get pos() {
