@@ -20,7 +20,7 @@ class Sketch extends Engine {
     }
     // noise setup
     this._simplex = new SimplexNoise();
-    // base hue setup, gives some variation over each sketch
+    // base hue setup, gives some hue_variation over each sketch
     const base_hue = random(360);
     // eyes setup
     this._eyes = [];

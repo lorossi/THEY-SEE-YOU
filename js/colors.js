@@ -4,8 +4,8 @@ class Color {
     this._S = S;
     this._L = L;
 
-
-    this._variation = 0;
+    this._hue_variation = 0;
+    this._ligthness_variation = 0;
   }
 
   _wrap(x, min = 0, max = 360) {
@@ -16,16 +16,29 @@ class Color {
     return x;
   }
 
+  _clamp(x, min = 0, max = 100) {
+    return Math.min(max, Math.max(min, x));
+  }
+
   get HSL() {
-    const H = this._wrap(this._H + this._variation);
-    return `hsl(${H}, ${this._S}%, ${this._L}%)`;
+    const H = this._wrap(this._H + this._hue_variation);
+    const L = this._clamp(this._L + this._ligthness_variation);
+    return `hsl(${H}, ${this._S}%, ${L}%)`;
   }
 
-  get variation() {
-    return this._variation;
+  get hue_variation() {
+    return this._hue_variation;
   }
 
-  set variation(v) {
-    this._variation = v;
+  set hue_variation(v) {
+    this._hue_variation = v;
+  }
+
+  get ligthness_variation() {
+    return this._ligthness_variation;
+  }
+
+  set ligthness_variation(l) {
+    this._ligthness_variation = l;
   }
 }

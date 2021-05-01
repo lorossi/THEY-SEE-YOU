@@ -3,14 +3,16 @@ class Eye {
     this._pos = new Position(Math.floor(x), Math.floor(y));
     this._r = r;
 
-    this._pupil_color = new Color(base_hue, 75, 40);
-    this._eyelid_color = new Color(212, 80, 5);
-    this._eyelid_border = new Color(212, 90, 5);
+    // colors
+    this._inner_pupil_color = new Color(base_hue, 75, 10);
+    this._outer_pupil_color = new Color(base_hue, 75, 40);
+    this._eyelid_color = new Color(231, 80, 5);
+    this._eyelid_border = new Color(231, 90, 5);
     this._background_color = new Color(0, 25, 95);
-    this._line_width = 2;
 
-    const max_variation = 15;
-    this._pupil_color.variation = random_interval(0, max_variation);
+    const max_hue_variation = 15;
+    this._inner_pupil_color.hue_variation = random_interval(0, max_hue_variation);
+    this._outer_pupil_color.hue_variation = random_interval(0, max_hue_variation);
 
     this._open = 1;
     this._rotation = 0;
@@ -20,21 +22,23 @@ class Eye {
 
   _calculateDistances() {
     this._pupil_distance = 0.4 * this._r;
-    this._minDist = this._r * 1;
-    this._maxDist = this._r * 4.5;
+    this._pupil_radius = this._r - this._pupil_distance;
+    this._min_dist = this._r * 1.5;
+    this._max_dist = this._r * 5;
+    this._line_width = this._r / 75 * 4;
   }
 
   move(mouse_pos) {
     const dist = this.posDist(mouse_pos);
 
-    if (dist > this._minDist) {
-      const percent = 1 - Math.min((dist - this._minDist) / (this._maxDist - this._minDist), 1);
+    if (dist > this._min_dist) {
+      const percent = 1 - Math.min((dist - this._min_dist) / (this._max_dist - this._min_dist), 1);
       this._open = this.ease(percent);
     } else {
       this._open = 1;
     }
 
-    if (dist < this._maxDist) this._rotation = Math.atan2(this.pos.y - mouse_pos.y, this.pos.x - mouse_pos.x) + Math.PI;
+    if (dist < this._max_dist) this._rotation = Math.atan2(this.pos.y - mouse_pos.y, this.pos.x - mouse_pos.x) + Math.PI;
     else this._rotation = 0;
   }
 
@@ -80,12 +84,24 @@ class Eye {
 
     // draw the pupil
     ctx.save();
+
+    // generate gradient
+    const pupil_gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, this._pupil_radius);
+    pupil_gradient.addColorStop(0, this._inner_pupil_color.HSL);
+    pupil_gradient.addColorStop(1, this._outer_pupil_color.HSL);
+    ctx.fillStyle = pupil_gradient;
+
     ctx.rotate(this._rotation);
     ctx.translate(this._pupil_distance, 0);
-    ctx.fillStyle = this._pupil_color.HSL;
     ctx.beginPath();
-    ctx.arc(0, 0, this._r - this._pupil_distance, 0, Math.PI * 2);
+    ctx.arc(0, 0, this._pupil_radius, 0, Math.PI * 2);
     ctx.fill();
+
+    ctx.fillStyle = this._eyelid_color.HSL;
+    ctx.beginPath();
+    ctx.arc(0, 0, this._pupil_radius / 10, 0, Math.PI * 2);
+    ctx.fill();
+
     ctx.restore();
 
     ctx.restore();
