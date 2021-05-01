@@ -4,25 +4,31 @@ class Eye {
     this._r = r;
 
     // colors
-    this._inner_pupil_color = new Color(base_hue, 75, 10);
-    this._outer_pupil_color = new Color(base_hue, 75, 40);
+    this._inner_iris_color = new Color(base_hue, 75, 20);
+    this._outer_iris_color = new Color(base_hue, 75, 40);
+    this._inner_pupil_color = new Color(0, 0, 10);
+    this._outer_pupil_color = new Color(0, 0, 5);
     this._eyelid_color = new Color(231, 80, 5);
     this._eyelid_border = new Color(231, 90, 5);
     this._background_color = new Color(0, 25, 95);
 
+    // variate hue slightly
     const max_hue_variation = 15;
-    this._inner_pupil_color.hue_variation = random_interval(0, max_hue_variation);
-    this._outer_pupil_color.hue_variation = random_interval(0, max_hue_variation);
+    this._outer_iris_color.hue_variation = random_interval(0, max_hue_variation);
+    this._inner_iris_color.hue_variation = random_interval(0, max_hue_variation);
 
+    // variable initializations
     this._open = 1;
     this._rotation = 0;
     this._eyelids_epsilon = 0.01;
-    this._calculateDistances();
+    // calculate sizes and distances relative to radius
+    this._calculateMeasures();
   }
 
-  _calculateDistances() {
-    this._pupil_distance = 0.4 * this._r;
-    this._pupil_radius = this._r - this._pupil_distance;
+  _calculateMeasures() {
+    this._iris_distance = 0.4 * this._r;
+    this._iris_radius = this._r - this._iris_distance;
+    this._pupil_radius = this._iris_radius * 0.2;
     this._min_dist = this._r * 1.5;
     this._max_dist = this._r * 5;
     this._line_width = this._r / 75 * 4;
@@ -82,28 +88,33 @@ class Eye {
     ctx.fill();
     ctx.restore();
 
-    // draw the pupil
+    // draw the iris
     ctx.save();
 
-    // generate gradient
+    // generate gradients
+    const iris_gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, this._iris_radius);
+    iris_gradient.addColorStop(0, this._inner_iris_color.HSL);
+    iris_gradient.addColorStop(1, this._outer_iris_color.HSL);
     const pupil_gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, this._pupil_radius);
     pupil_gradient.addColorStop(0, this._inner_pupil_color.HSL);
     pupil_gradient.addColorStop(1, this._outer_pupil_color.HSL);
-    ctx.fillStyle = pupil_gradient;
 
     ctx.rotate(this._rotation);
-    ctx.translate(this._pupil_distance, 0);
+    ctx.translate(this._iris_distance, 0);
+
+    // draw iris
+    ctx.fillStyle = iris_gradient;
+    ctx.beginPath();
+    ctx.arc(0, 0, this._iris_radius, 0, Math.PI * 2);
+    ctx.fill();
+
+    // draw pupil
+    ctx.fillStyle = pupil_gradient;
     ctx.beginPath();
     ctx.arc(0, 0, this._pupil_radius, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.fillStyle = this._eyelid_color.HSL;
-    ctx.beginPath();
-    ctx.arc(0, 0, this._pupil_radius / 10, 0, Math.PI * 2);
-    ctx.fill();
-
     ctx.restore();
-
     ctx.restore();
 
     // draw the outline
@@ -144,7 +155,9 @@ class Eye {
   }
 
   set r(new_r) {
+    // while updating the radius, also update
+    // its relative measures
     this._r = new_r;
-    this._calculateDistances();
+    this._calculateMeasures();
   }
 }
