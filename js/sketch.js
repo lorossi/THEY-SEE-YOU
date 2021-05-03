@@ -6,7 +6,7 @@ class Sketch extends Engine {
     this._max_radius = 100;
     this._max_eyes = 250;
     this._dr = 5;
-    this._noise_radius = 2;
+    this._noise_radius = 0.75;
 
     this._duration = 900;
     this._recording = false;
@@ -80,12 +80,9 @@ class Sketch extends Engine {
       // noise coordinates, used to loop around
       const nx = this._noise_radius * (1 + Math.cos(time_theta));
       const ny = this._noise_radius * (1 + Math.sin(time_theta));
-      // get noise and calculate the radius
-      const n = this._simplex.noise2D(nx, ny);
-      const rho = this.width / 2 * n;
-      // get the actual mouse position
-      const mx = rho * Math.cos(time_theta) + this.width / 2;
-      const my = rho * Math.sin(time_theta) + this.height / 2;
+      // get noise and calculate the the actual mouse position
+      const mx = this._simplex.noise3D(nx, ny, 1000) * this.width / 2 + this.width / 2;
+      const my = this._simplex.noise3D(nx, ny, 2000) * this.height / 2 + this.height / 2;
       // update the variables
       this._mouse_pos = new Position(mx, my);
       this._mouse_out = false;
