@@ -9,7 +9,6 @@ class Eye {
     this._inner_pupil_color = new Color(0, 0, 10);
     this._outer_pupil_color = new Color(0, 0, 5);
     this._eyelid_color = new Color(231, 80, 5);
-    this._eyelid_border = new Color(231, 90, 5);
     this._background_color = new Color(0, 25, 95);
 
     // variate hue slightly
@@ -26,6 +25,8 @@ class Eye {
   }
 
   _calculateMeasures() {
+    // some distances are radius related.
+    // this function gets called whenever the radius is changed.
     this._iris_distance = 0.4 * this._r;
     this._iris_radius = this._r - this._iris_distance;
     this._pupil_radius = this._iris_radius * 0.2;
@@ -35,12 +36,7 @@ class Eye {
   }
 
   move(mouse_pos, mouse_out) {
-    if (mouse_out) {
-      this._open = 0;
-      return;
-    }
-
-    if (mouse_pos.x == undefined || mouse_pos.y == undefined) {
+    if (mouse_out || mouse_pos.x == undefined || mouse_pos.y == undefined) {
       this._open = 0;
       return;
     }
@@ -70,19 +66,6 @@ class Eye {
     ctx.arc(0, 0, this.r, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
-
-    // give the eyelids some border
-    if (this._open > this._eyelids_epsilon && this._open < (1 - this._eyelids_epsilon)) {
-      const line_width = 4 * (1 - this._open);
-      ctx.save();
-      ctx.beginPath();
-      ctx.strokeStyle = this._eyelid_border.HSL;
-      ctx.lineWidth = line_width;
-      ctx.ellipse(0, 0, this._r - line_width, this._r * this._open + line_width / 2, 0, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.restore();
-    }
-
 
     ctx.save();
     // clip the inner part of the eye so the eye can be correctly opened and closed

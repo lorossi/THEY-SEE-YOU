@@ -10,7 +10,7 @@ class Sketch extends Engine {
 
     this._duration = 900;
     this._recording = false;
-    this._auto = false;
+    this._auto = true;
   }
 
   setup() {
@@ -61,7 +61,7 @@ class Sketch extends Engine {
       }
     }
     const elapsed = performance.now() - started;
-    console.log("Generated", this._eyes.length, "eyes in", elapsed, "ms");
+    //console.log("Generated", this._eyes.length, "eyes in", elapsed, "ms");
   }
 
   draw() {
@@ -72,18 +72,19 @@ class Sketch extends Engine {
     }
 
     if (this._auto) {
+      // elapsed percent
       const percent = (this.frameCount % this._duration) / this._duration;
       const time_theta = percent * Math.PI * 2;
-
+      // noise coordinates, used to loop around
       const nx = this._noise_radius * (1 + Math.cos(time_theta));
       const ny = this._noise_radius * (1 + Math.sin(time_theta));
-
+      // get noise and calculate the radius
       const n = this._simplex.noise2D(nx, ny);
       const rho = this.width / 2 * n;
-
+      // get the actual mouse position
       const mx = rho * Math.cos(time_theta) + this.width / 2;
       const my = rho * Math.sin(time_theta) + this.height / 2;
-
+      // update the variables
       this._mouse_pos = new Position(mx, my);
       this._mouse_out = false;
     }
@@ -118,6 +119,7 @@ class Sketch extends Engine {
   mousemove(e) {
     if (this._auto) return;
     this._mouse_pos = this._calculate_press_coords(e);
+    this._mouse_out = false;
   }
 
   mouseenter(e) {
