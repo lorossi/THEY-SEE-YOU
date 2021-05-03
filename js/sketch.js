@@ -1,16 +1,17 @@
 class Sketch extends Engine {
   preload() {
     this._background_color = new Color(0, 0, 86);
-    this._max_tries = 10000;
+    this._max_tries = 5000;
     this._min_radius = 15;
     this._max_radius = 100;
     this._max_eyes = 250;
     this._dr = 5;
-    this._noise_radius = 1;
+    this._noise_radius = 2;
 
     this._duration = 900;
     this._recording = false;
-    this._auto = true;
+    this._auto = false;
+    this._show_fps = false;
   }
 
   setup() {
@@ -29,7 +30,7 @@ class Sketch extends Engine {
     // eyes setup
     this._eyes = [];
     let tries = 0;
-
+    // place eyes
     const started = performance.now();
     while (tries < this._max_tries && this._eyes.length < this._max_eyes) {
       tries++;
@@ -60,8 +61,9 @@ class Sketch extends Engine {
         }
       }
     }
+    this._eyes.forEach(e => e.generateGradients(this.ctx));
     const elapsed = performance.now() - started;
-    //console.log("Generated", this._eyes.length, "eyes in", elapsed, "ms");
+    console.log("Generated", this._eyes.length, "eyes in", elapsed, "ms");
   }
 
   draw() {
@@ -113,6 +115,16 @@ class Sketch extends Engine {
         this._capturer.save();
         console.log("%c Recording ended", "color: red; font-size: 2rem");
       }
+    }
+
+    // show fps
+    if (this._show_fps) {
+      const fps = Math.floor(this.frameRate);
+      this.ctx.save();
+      this.ctx.fillStyle = "red";
+      this.ctx.font = "40px Roboto";
+      this.ctx.fillText(fps, 0, 40);
+      this.ctx.restore();
     }
   }
 
