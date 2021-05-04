@@ -1,6 +1,6 @@
 class Sketch extends Engine {
   preload() {
-    this._background_color = new Color(0, 0, 86);
+    this._background_color = new Color(0, 0, 84);
     this._max_tries = 5000;
     this._min_radius = 15;
     this._max_radius = 100;
@@ -12,6 +12,8 @@ class Sketch extends Engine {
     this._recording = false;
     this._auto = false;
     this._show_fps = false;
+
+    console.log("%c Curious? Check the repo! https://github.com/lorossi/THEY-CONTROL-YOU", "color: blue; font-size: 1rem");
   }
 
   setup() {
@@ -31,7 +33,6 @@ class Sketch extends Engine {
     this._eyes = [];
     let tries = 0;
     // place eyes
-    const started = performance.now();
     while (tries < this._max_tries && this._eyes.length < this._max_eyes) {
       tries++;
 
@@ -61,9 +62,8 @@ class Sketch extends Engine {
         }
       }
     }
+    // pre generate gradients to ease the performances
     this._eyes.forEach(e => e.generateGradients(this.ctx));
-    const elapsed = performance.now() - started;
-    console.log("Generated", this._eyes.length, "eyes in", elapsed, "ms");
   }
 
   draw() {

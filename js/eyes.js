@@ -9,7 +9,7 @@ class Eye {
     this._inner_pupil_color = new Color(0, 0, 10);
     this._outer_pupil_color = new Color(0, 0, 5);
     this._eyelid_color = new Color(231, 80, 5);
-    this._background_color = new Color(0, 25, 95);
+    this._background_color = new Color(345, 60, 95);
 
     // variate hue slightly
     const max_hue_variation = 15;

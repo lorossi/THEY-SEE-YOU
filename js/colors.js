@@ -1,8 +1,9 @@
 class Color {
-  constructor(H, S, L) {
+  constructor(H, S, L, A = 1) {
     this._H = H;
     this._S = S;
     this._L = L;
+    this._A = A;
 
     this._hue_variation = 0;
     this._ligthness_variation = 0;
@@ -23,7 +24,7 @@ class Color {
   get HSL() {
     const H = this._wrap(this._H + this._hue_variation);
     const L = this._clamp(this._L + this._ligthness_variation);
-    return `hsl(${H}, ${this._S}%, ${L}%)`;
+    return `hsla(${H}, ${this._S}%, ${L}%, ${this._A})`;
   }
 
   get hue_variation() {
