@@ -8,7 +8,7 @@ class Sketch extends Engine {
     this._dr = 5;
     this._noise_radius = 0.75;
 
-    this._duration = 900;
+    this._duration = 600;
     this._recording = false;
     this._auto = false;
     this._show_fps = false;
@@ -76,7 +76,7 @@ class Sketch extends Engine {
     if (this._auto) {
       // elapsed percent
       const percent = (this.frameCount % this._duration) / this._duration;
-      const time_theta = percent * Math.PI * 2;
+      const time_theta = percent * Math.PI * 4;
       // noise coordinates, used to loop around
       const nx = this._noise_radius * (1 + Math.cos(time_theta));
       const ny = this._noise_radius * (1 + Math.sin(time_theta));
