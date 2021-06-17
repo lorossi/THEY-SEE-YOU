@@ -19,6 +19,7 @@ The whole animation is rendered with in a surprisingly smooth manner on a JS can
 ![render-1](output/output-1/output.gif)
 ![render-2](output/output-2/output.gif)
 ![render-3](output/output-3/output.gif)
+![render-4](output/output-4/output.gif)
 
 ## Credits
 
