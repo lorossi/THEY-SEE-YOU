@@ -17,7 +17,7 @@ As I always do with my interactive projects, I publish the link and a few pre-re
 
 ## Technical stuff
 
-The whole animation is rendered in a surprisingly smooth manner on a JS canvas. The eyes are placed before everything else is drawn using a circle packing algorithm. It takes way less than I was anticipating, only taking a few milliseconds to place all the eyes.
+The whole animation is rendered in a surprisingly smooth manner on a JS canvas. The eyes are placed before everything else is drawn using a circle packing algorithm. It takes way less than I was anticipating, as it takes only a few milliseconds to find space for all the eyes.
 
 ## Output
 
