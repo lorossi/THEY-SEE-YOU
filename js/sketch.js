@@ -18,9 +18,9 @@ class Sketch extends Engine {
 
   setup() {
     // setup capturer
+    this._capturer_started = false;
     if (this._recording) {
       this._capturer = new CCapture({ format: "png" });
-      this._capturer_started = false;
     }
     // eyes look location
     this._mouse_pos = new Position();
