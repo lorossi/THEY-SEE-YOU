@@ -1,6 +1,9 @@
-# THEY CONTROL YOU
+# THEY SEE YOU
 
 ## Try it here [link here](link here)
+
+
+## Background
 
 This week's weekly obsession is googly eyes. I like the way they convert anything (for me, at least) into something stupid and hilarious. I go around with at least a bag of them in my pockets, ready to be stuck to any surface unlucky enough to be in the wrong place (near me) at the wrong time (when I'm near them).
 
@@ -10,9 +13,11 @@ I started playing around with colors and I quickly realized this would work way 
 
 I wanted to give this whole project a vague aura of creepiness and unease. Imagine this sketch being drawn on a bigger screen! This would really creep me out.
 
-As I always do with my interactive projects, I publish the link and a few pre-rendered videos on this page, as well as in my [Instagram profile](https://instagram.com/lorossi97). Follow me to view my work and see what I like to do!
+As I always do with my interactive projects, I publish the link and a few pre-rendered (albeit in low-quality) videos on this page, as well as in my [Instagram profile](https://instagram.com/lorossi97). Follow me to view my work and see what I like to do!
 
-The whole animation is rendered with in a surprisingly smooth manner on a JS canvas. The eyes are placed before everything else is drawn using a circle packing algorithm. It takes way less than I was anticipating, only taking a few milliseconds to place all the eyes.
+## Technical stuff
+
+The whole animation is rendered in a surprisingly smooth manner on a JS canvas. The eyes are placed before everything else is drawn using a circle packing algorithm. It takes way less than I was anticipating, only taking a few milliseconds to place all the eyes.
 
 ## Output
 
